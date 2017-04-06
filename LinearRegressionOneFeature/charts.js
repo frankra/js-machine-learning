@@ -69,16 +69,18 @@
       .attr("stroke-width", 1.5)
       .attr("d", line);
 
+    return mParts;
+
   }
 
   Charts.prototype.plotScatter = function (svg, aData, sXAttribute, sYAttribute) {
-    
+
     var mParts = renderChartBase(svg, aData, sXAttribute, sYAttribute);
 
     var yMap = function (d) { return mParts.y(d[sYAttribute]); }; // data -> display
     var xMap = function (d) { return mParts.x(d[sXAttribute]); }; // data -> display
     // draw dots
-    svg.selectAll(".dot")
+    mParts.g.selectAll(".dot")
       .data(aData)
       .enter().append("circle")
       .attr("class", "dot")
@@ -87,7 +89,32 @@
       .attr("cy", yMap)
       .style("fill", 'red');
 
+    return mParts;
   }
+
+  Charts.prototype.plotHipothesis = function (svg, aOriginalData, aHipothesisData, sXAttribute, sYAttribute) {
+
+    var mParts = this.plotScatter(svg, aOriginalData, sXAttribute, sYAttribute);
+    d3.selectAll('.hipothesis').remove();
+    // draw line
+    var line = d3.line()
+      .x(function (d) { return mParts.x(d[sXAttribute]); })
+      .y(function (d) { return mParts.y(d[sYAttribute]); });
+
+    mParts.g.append("path")
+      .datum(aHipothesisData)
+      .attr("fill", "none")
+      .attr('class','hipothesis')
+      .attr("stroke", "steelblue")
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-linecap", "round")
+      .attr("stroke-width", 1.5)
+      .attr("d", line);
+
+  }
+
+
+
 
   window.top.Charts = new Charts();
 

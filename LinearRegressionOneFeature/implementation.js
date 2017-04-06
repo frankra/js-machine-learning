@@ -1,51 +1,58 @@
 (function () {
   "use strict";
 
-  function LinearRegressionOneFeature(){}
+  function LinearRegressionOneFeature() { }
 
-  LinearRegressionOneFeature.prototype.aTrainingSet = [
-    { x: 1, y: 1 },
-    { x: 2, y: 2 },
-    { x: 3, y: 3 }
-  ]
+  LinearRegressionOneFeature.prototype.aTrainingSet = [];
+  //Used to store the Squared Error Results
+  LinearRegressionOneFeature.prototype.aSquaredErrorResults = [];
+
+  LinearRegressionOneFeature.prototype.aHipothesisSet = [];
+
   function calculateRandomBetweenIncreasing(min, max, i) {
     max = max + i;
     min = min + i;
     return Math.floor(Math.random() * (max - min)) + min;
   }
-  LinearRegressionOneFeature.prototype.generateRandomTrainingSet = function(iSetSize){
+  LinearRegressionOneFeature.prototype.generateRandomTrainingSet = function (iSetSize) {
     this.aTrainingSet = [];
 
     iSetSize = iSetSize || 50;
     var min = 1;
-    var max = 10;
+    var max = 100;
 
-    for (var i = 0; i < iSetSize; i++){
+    for (var i = 0; i < iSetSize; i++) {
       this.aTrainingSet.push({
-        x: i+ 1,
+        x: i,
         y: calculateRandomBetweenIncreasing(min, max, i)
       });
     }
     return this.aTrainingSet;
   }
 
-  //Used to store the Squared Error Results
-  LinearRegressionOneFeature.prototype.aSquaredErrorResults = [];
+  LinearRegressionOneFeature.prototype.growTrainingSet = function (iIncreaseFactor) {
+    
+    iIncreaseFactor = iIncreaseFactor || 30;
+    var min = 1;
+    var max = 100;
 
-  /*
-  4       x
-  3     x
-  2   x
-  1 x 
-  0 1 2 3 4
-  */
+    var _length = this.aTrainingSet.length;
+    for (var i = 0; i < iIncreaseFactor; i++) {
+      this.aTrainingSet.push({
+        x: _length + i,
+        y: calculateRandomBetweenIncreasing(min, max, _length + i)
+      });
+    }
+    return this.aTrainingSet;
+  }
+
 
   //hϴ(x) = 0 + ϴ1 * x 
-  LinearRegressionOneFeature.prototype.hipotesis = function(x, vTetha1) {
+  LinearRegressionOneFeature.prototype.hipotesis = function (x, vTetha1) {
     return vTetha1 * x
   }
 
-  LinearRegressionOneFeature.prototype.squaredError = function(vPossibleTetha1) {
+  LinearRegressionOneFeature.prototype.squaredError = function (vPossibleTetha1) {
     var vLinearRegressionResult = 0;
     for (var i = 0, ii = this.aTrainingSet.length; i < ii; i++) {
       vLinearRegressionResult += Math.pow(this.hipotesis(this.aTrainingSet[i].x, vPossibleTetha1) - this.aTrainingSet[i].y, 2);
@@ -53,7 +60,18 @@
     return (1 / (2 * this.aTrainingSet.length)) * vLinearRegressionResult;
   }
 
-  LinearRegressionOneFeature.prototype.findLowestSquaredErrorResult = function(vCurrentSquaredErrorResult, vTethaTest, vVarianceFactor) {
+  LinearRegressionOneFeature.prototype.calculateHipothesisSet = function (iCalculatedThetha) {
+    this.aHipothesisSet = [];
+    for (var i = 0, ii = this.aTrainingSet.length; i < ii; i++) {
+      this.aHipothesisSet.push({
+        x: i,
+        y: this.hipotesis(i, iCalculatedThetha)
+      });
+    }
+    return this.aHipothesisSet;
+  }
+
+  LinearRegressionOneFeature.prototype.findLowestSquaredErrorResult = function (vCurrentSquaredErrorResult, vTethaTest, vVarianceFactor) {
     var vIncreasedTetha = vTethaTest + vVarianceFactor;
     var vDecreasedTetha = vTethaTest - vVarianceFactor;
     var vIncreasingTethaSQEResult = this.squaredError(vIncreasedTetha);

@@ -11,7 +11,11 @@
 
 <body>
   <div id="input-container">
-    <button onclick="randomize()"></button>
+    <button onclick="randomize()">Randomize</button>
+    <button onclick="grow()">Grow</button>
+    <button onclick="stop()">Stop</button>
+    <br>
+    <div><span>Tetha value: </span><span id="tethaValue"></span></div>
   </div>
   <div id="chart-container">
 
@@ -21,30 +25,47 @@
 
   function render(){
     d3.selectAll('svg').remove();
-  //Data
-
+    //Data
     var data = d3.select('body').append('svg');
     data.attr('height', 500).attr('width', 960);
     Charts.plotScatter(data, LinearRegressionOneFeature.aTrainingSet, 'x', 'y');
 
-
-
     //Tetha
     var iCalculatedTetha = LinearRegressionOneFeature.findLowestSquaredErrorResult(9999, 10, 1);
-console.log(iCalculatedTetha);
-    //Plot Tetha Calculation
+    document.getElementById('tethaValue').innerHTML = iCalculatedTetha;
     var tetha = d3.select('body').append('svg');
     tetha.attr('height', 500).attr('width', 960);
     Charts.plotLine(tetha, LinearRegressionOneFeature.aSquaredErrorResults.map(function (oItem, iIndex) {
-      oItem.try = iIndex + 1;
+      oItem.try = iIndex;
       return oItem;
     }), 'try', 'sqrdErr');
+
+    //Hipothesis
+    var hipothesis = d3.select('body').append('svg');
+    hipothesis.attr('height', 500).attr('width', 960);
+    Charts.plotHipothesis(hipothesis, LinearRegressionOneFeature.aTrainingSet, LinearRegressionOneFeature.calculateHipothesisSet(iCalculatedTetha), 'x', 'y');
   }
 
   function randomize(){
     LinearRegressionOneFeature.generateRandomTrainingSet();
     LinearRegressionOneFeature.aSquaredErrorResults = [];
+    LinearRegressionOneFeature.aHipothesisSet = [];
     render();
+  }
+
+  function grow(){
+    randomize();
+
+    window.top.intervalID = setInterval(function(){
+      LinearRegressionOneFeature.growTrainingSet();
+      LinearRegressionOneFeature.aHipothesisSet = [];
+      render();
+    },2000);
+
+  }
+
+  function stop(){
+    clearInterval(intervalID);
   }
   
 
