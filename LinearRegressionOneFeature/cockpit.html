@@ -10,12 +10,24 @@
 </head>
 
 <body>
-  <svg width="960" height="500"></svg>
-  <script>
-    LinearRegressionOneFeature.findLowestSquaredErrorResult(9999, 10, 1);
-    Charts.plotLine(d3.select('svg'), LinearRegressionOneFeature.aSquaredErrorResults, 'sqrdErr', 'tetha');
-  </script>
-</body>
+  <div id="input-container">
 
+  </div>
+  <div id="chart-container">
+    
+  </div>
+</body>
+<script>
+    LinearRegressionOneFeature.findLowestSquaredErrorResult(9999, 10, 1);
+
+    var tetha = d3.select('body').append('svg');
+    tetha.attr('height',500).attr('width',960);
+    Charts.plotLine(tetha, LinearRegressionOneFeature.aSquaredErrorResults.map(function(oItem, iIndex){
+      oItem.try = iIndex + 1;
+      return oItem;
+    }), 'try', 'sqrdErr');
+
+
+  </script>
 
 </html>

@@ -25,8 +25,14 @@
     g.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x))
-      .select(".domain")
-      .remove();
+      .append("text")
+      .attr("fill", "#000")
+      .attr("y", 20)
+      .attr("x", 9)
+      .attr("dy", "0.71em")
+      .attr("text-anchor", "end")
+      .text(sXAttribute);
+      
 
     g.append("g")
       .call(d3.axisLeft(y))
@@ -47,6 +53,10 @@
       .attr("stroke-width", 1.5)
       .attr("d", line);
       
+  }
+
+  Charts.prototype.plotScatterPlot = function(svg, aData, xAttribute, yAttribute){
+
   }
 
   window.top.Charts = new Charts();
