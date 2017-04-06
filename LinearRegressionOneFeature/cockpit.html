@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>ML Test</title>
+  <title>Linear Regression - One Variable Only</title>
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="implementation.js"></script>
   <script src="charts.js"></script>
@@ -11,35 +11,46 @@
 
 <body>
   <div id="input-container">
-
+    <button onclick="randomize()"></button>
   </div>
   <div id="chart-container">
-    
+
   </div>
 </body>
 <script>
-//Data
 
-   var data = d3.select('body').append('svg');
-    data.attr('height',500).attr('width',960);
-    Charts.plotScatterPlot(data, LinearRegressionOneFeature.aTrainingSet, 'x', 'y');
+  function render(){
+    d3.selectAll('svg').remove();
+  //Data
+
+    var data = d3.select('body').append('svg');
+    data.attr('height', 500).attr('width', 960);
+    Charts.plotScatter(data, LinearRegressionOneFeature.aTrainingSet, 'x', 'y');
 
 
 
-//Tetha
+    //Tetha
     var iCalculatedTetha = LinearRegressionOneFeature.findLowestSquaredErrorResult(9999, 10, 1);
-
+console.log(iCalculatedTetha);
     //Plot Tetha Calculation
     var tetha = d3.select('body').append('svg');
-    tetha.attr('height',500).attr('width',960);
-    Charts.plotLine(tetha, LinearRegressionOneFeature.aSquaredErrorResults.map(function(oItem, iIndex){
+    tetha.attr('height', 500).attr('width', 960);
+    Charts.plotLine(tetha, LinearRegressionOneFeature.aSquaredErrorResults.map(function (oItem, iIndex) {
       oItem.try = iIndex + 1;
       return oItem;
     }), 'try', 'sqrdErr');
+  }
+
+  function randomize(){
+    LinearRegressionOneFeature.generateRandomTrainingSet();
+    LinearRegressionOneFeature.aSquaredErrorResults = [];
+    render();
+  }
+  
 
 
+//Hipothesis
 
-
-  </script>
+</script>
 
 </html>

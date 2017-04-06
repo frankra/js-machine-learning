@@ -4,10 +4,31 @@
   function LinearRegressionOneFeature(){}
 
   LinearRegressionOneFeature.prototype.aTrainingSet = [
-    { x: 2, y: 1 },
-    { x: 4, y: 2 },
-    { x: 5, y: 3 }
+    { x: 1, y: 1 },
+    { x: 2, y: 2 },
+    { x: 3, y: 3 }
   ]
+  function calculateRandomBetweenIncreasing(min, max, i) {
+    max = max + i;
+    min = min + i;
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+  LinearRegressionOneFeature.prototype.generateRandomTrainingSet = function(iSetSize){
+    this.aTrainingSet = [];
+
+    iSetSize = iSetSize || 50;
+    var min = 1;
+    var max = 10;
+
+    for (var i = 0; i < iSetSize; i++){
+      this.aTrainingSet.push({
+        x: i+ 1,
+        y: calculateRandomBetweenIncreasing(min, max, i)
+      });
+    }
+    return this.aTrainingSet;
+  }
+
   //Used to store the Squared Error Results
   LinearRegressionOneFeature.prototype.aSquaredErrorResults = [];
 
