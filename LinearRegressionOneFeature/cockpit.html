@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>ML Test</title>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="implementation.js"></script>
+  <script src="charts.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <svg width="960" height="500"></svg>
+  <script>
+    LinearRegressionOneFeature.findLowestSquaredErrorResult(9999, 10, 1);
+    Charts.plotLine(d3.select('svg'), LinearRegressionOneFeature.aSquaredErrorResults, 'sqrdErr', 'tetha');
+  </script>
+</body>
+
+
+</html>
